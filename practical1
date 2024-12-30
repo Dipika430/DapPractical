@@ -1,1 +1,61 @@
+def water_jug_dfs_stack(jug1_capacity, jug2_capacity, target):
+    # Stack to hold states as (x, y)
+    stack = [(0, 0)]
+    visited = set()
+
+    print("\nJUG A\tJUG B")
+
+    while stack:
+        # Pop the current state
+        x, y = stack.pop()
+
+        # Print the current state
+        print(f"{x}\t{y}")
+
+        # Check if we reached the goal state
+        if x == target or y == target:
+            print(f"Goal state reached: ({x}, {y})")
+            return True
+
+        # If the current state is already visited, skip it
+        if (x, y) in visited:
+            continue
+        
+        # Mark the current state as visited
+        visited.add((x, y))
+
+        # Generate all possible next states and push them to the stack
+        # Fill Jug1
+        stack.append((jug1_capacity, y))
+        # Fill Jug2
+        stack.append((x, jug2_capacity))
+        # Empty Jug1
+        stack.append((0, y))
+        # Empty Jug2
+        stack.append((x, 0))
+        # Pour Jug1 -> Jug2
+        pour = min(x, jug2_capacity - y)
+        stack.append((x - pour, y + pour))
+        # Pour Jug2 -> Jug1
+        pour = min(y, jug1_capacity - x)
+        stack.append((x + pour, y - pour))
+
+    # If no solution is found
+    print("No solution found.")
+    return False
+
+
+# Wrapper Function
+def solve_water_jug_with_stack():
+    # Take user input
+    jug1_capacity = int(input("Enter the capacity of Jug 1: "))
+    jug2_capacity = int(input("Enter the capacity of Jug 2: "))
+    target = int(input("Enter the target amount: "))
+
+    if not water_jug_dfs_stack(jug1_capacity, jug2_capacity, target):
+        print("No solution found.")
+
+
+# Main Execution
+solve_water_jug_with_stack()
 
